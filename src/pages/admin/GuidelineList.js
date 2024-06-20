@@ -5,15 +5,20 @@ import axios from "axios";
 import { baseUrl } from "../../api/baseUrl";
 import { header } from "../../component/core/helper";
 import { toast } from "react-toastify";
-import { ALL_GUIDELINE } from "../../api/constApi";
+import { ALL_GUIDELINE, REMOVE_GUIDELINE } from "../../api/constApi";
+import Modal from "../../common/Modals/Modal";
+import AddGuidelinePopUp from "../../component/popUp/AddGuidelinePopUp";
 
 export default function GuidelineList() {
   
   const [guidelineList, setGuidelineList] = useState([]);
+  const [isAddGuidelinePopUpOpen, setIsAddGuidelinePopUpOpen] = useState(false);
+  const [reload, setReload] = useState(false);
+  const [details, setDetails] = useState(false);
 
   const getAllGuidelineList = async () => {
     try {
-      const response = await axios(`${baseUrl}${ALL_GUIDELINE}`, {headers: header});
+      const response = await axios.get(`${baseUrl}${ALL_GUIDELINE}`, {headers: header});
       if (response.data.IsSuccess) {
         setGuidelineList(response.data.Data);
       } else {
@@ -24,10 +29,23 @@ export default function GuidelineList() {
     }
   };
 
+  const removeGuideline = async (id) => {
+    try {
+      const response = await axios.post(`${baseUrl}${REMOVE_GUIDELINE}`, {guidelineid: id}, {headers: header});
+      if (response.data.IsSuccess) {
+        getAllGuidelineList();
+      } else {
+        toast.error(response.data.Message);
+      }
+    } catch (error) { 
+      toast.error("Something Went To Wrong!!");
+    }
+  }
+
   
   const columns = [
     {
-      header: "Guideline ID",
+      header: "Policy ID",
       field: (row) => {
         return (
           <span className="text-sm">
@@ -37,16 +55,26 @@ export default function GuidelineList() {
       },
     },
     {
-      header: "Guideline",
+      header: "Policy",
       field: (row) => {
         return <span className="text-sm">{row.policy}</span>;
       },
     },
+    {
+      header: "Action",
+      field: (row) => {
+        return <div>
+        <button className="btn" onClick={() => {setDetails({guidelineid: row._id, policyid: row.policyid, policy: row.policy}); setIsAddGuidelinePopUpOpen(true);}}>Edit</button>
+        <button className="btn" onClick={() => removeGuideline(row._id)}>Remove</button>
+        </div>
+      }
+    },
+
   ];
 
   useEffect(() => {
     getAllGuidelineList();
-  }, []);
+  }, [reload]);
 
   return (
     <>
@@ -58,6 +86,7 @@ export default function GuidelineList() {
               <h3 className="text-2xl font-play font-bold tracking-wider leading-8">
                 Guideline List
               </h3>
+              <button className="btn btn-dark" onClick={() => setIsAddGuidelinePopUpOpen(true)}>Add Guideline</button>
             </div>
             <DataTable
               value={guidelineList}
@@ -72,6 +101,9 @@ export default function GuidelineList() {
           </div>
         </div>
       </div>
+      <Modal isOpen={isAddGuidelinePopUpOpen}>
+        <AddGuidelinePopUp handleClose={setIsAddGuidelinePopUpOpen} setReload={reload} data={details}/>
+    </Modal>
     </>
   );
 }

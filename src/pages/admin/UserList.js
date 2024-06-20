@@ -5,7 +5,7 @@ import axios from "axios";
 import { baseUrl } from "../../api/baseUrl";
 import { header } from "../../component/core/helper";
 import { toast } from "react-toastify";
-import { ALL_USER } from "../../api/constApi";
+import { ADMIN, ALL_USER } from "../../api/constApi";
 
 export default function UserList() {
   
@@ -13,9 +13,27 @@ export default function UserList() {
 
   const getAllUserList = async () => {
     try {
-      const response = await axios(`${baseUrl}${ALL_USER}`, {headers: header});
+      const response = await axios.get(`${baseUrl}${ALL_USER}`, {headers: header});
       if (response.data.IsSuccess) {
         setUserList(response.data.Data);
+      } else {
+        toast.error(response.data.Message);
+      }
+    } catch (error) {
+      toast.error("Something Went To Wrong!!");
+    }
+  };
+
+  const makeAdmin = async (email, role) => {
+    const payload = {
+      email: email,
+      role: role
+    }
+    try {
+      const response = await axios.post(`${baseUrl}${ADMIN}`, payload, {headers: header});
+      if (response.data.IsSuccess) {
+        getAllUserList();
+        toast.success(response.data.Message);
       } else {
         toast.error(response.data.Message);
       }
@@ -46,7 +64,7 @@ export default function UserList() {
       header: "Role",
       field: (row) => {
         return (
-          <span className="text-sm">{row.role === 0 ? "User" : "Admin"}</span>
+          <span className="text-sm" onClick={() => makeAdmin(row.email, row.role)}>{row.role === 0 ? "User" : "Admin"}</span>
         );
       },
     },
