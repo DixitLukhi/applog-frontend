@@ -74,7 +74,7 @@ export default function AppList() {
       header: "Action",
       field: (row) => {
         return <div>
-        <button className="btn" onClick={() => {setDetails({guidelineid: row._id, policyid: row.policyid, policy: row.policy})}}>Edit</button>
+        <button className="btn" onClick={() => {setDetails({appid: row._id, appName: row.appName, appLogo: row.appLogo, guidelines: row.guidelines}); setIsAddAppPopUpOpen(true)}}>Edit</button>
         <button className="btn" onClick={() => removeApp(row._id)}>Remove</button>
         </div>
       }
@@ -111,7 +111,7 @@ export default function AppList() {
         </div>
       </div>
       <Modal isOpen={isAddAppPopUpOpen}>
-        <AddAppPopUp handleClose={setIsAddAppPopUpOpen} setReload={reload} data={details}/>
+        <AddAppPopUp handleClose={setIsAddAppPopUpOpen} setReload={setReload} data={details}/>
     </Modal>
 
     </>

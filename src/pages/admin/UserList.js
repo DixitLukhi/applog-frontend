@@ -4,7 +4,7 @@ import { Column } from "primereact/column";
 import axios from "axios";
 import { baseUrl } from "../../api/baseUrl";
 import { header } from "../../component/core/helper";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { ADMIN, ALL_USER } from "../../api/constApi";
 
 export default function UserList() {
@@ -98,6 +98,18 @@ export default function UserList() {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </>
   );
 }

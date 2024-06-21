@@ -4,7 +4,7 @@ import { Column } from "primereact/column";
 import axios from "axios";
 import { baseUrl } from "../../api/baseUrl";
 import { header } from "../../component/core/helper";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import { ALL_GUIDELINE, REMOVE_GUIDELINE } from "../../api/constApi";
 import Modal from "../../common/Modals/Modal";
 import AddGuidelinePopUp from "../../component/popUp/AddGuidelinePopUp";
@@ -102,8 +102,20 @@ export default function GuidelineList() {
         </div>
       </div>
       <Modal isOpen={isAddGuidelinePopUpOpen}>
-        <AddGuidelinePopUp handleClose={setIsAddGuidelinePopUpOpen} setReload={reload} data={details}/>
+        <AddGuidelinePopUp handleClose={setIsAddGuidelinePopUpOpen} setReload={setReload} data={details}/>
     </Modal>
+    <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </>
   );
 }

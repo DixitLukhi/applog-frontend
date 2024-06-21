@@ -18,7 +18,7 @@ export default function Header() {
   return (
     <>
       <header className="header">
-        <h1>My Website</h1>
+        <h1 onClick={() => navigate("/")}>AppLog</h1>
         <nav>
           <ul>
             <li>

@@ -11,7 +11,7 @@ export default function AddGuidelinePopUp({ handleClose, data, setReload}) {
 
     const guidelineInitialState = {
         guidelineid: data?.guidelineid ? data?.guidelineid : "",
-        policyid: data?.policyid ? data?.policyid : "",
+        policyid: data?.policyid ? data?.policyid : "RBI",
         policy: data?.policy ? data?.policy : ""
       };
 
@@ -26,7 +26,7 @@ export default function AddGuidelinePopUp({ handleClose, data, setReload}) {
           const response = await axios.post(`${baseUrl}${GUIDELINE}`, payload, {headers: header});
           if (response.data?.IsSuccess) {
             setReload(true);
-            // handleClose(false);
+            handleClose(false);
             toast.success(response.data.Message);
           } else {
             toast.error(response.data.Message);

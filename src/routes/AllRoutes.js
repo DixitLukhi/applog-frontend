@@ -9,7 +9,7 @@ import AppList from "../pages/admin/AppList";
 import OneApp from "../pages/landingPage/OneApp";
 
 function AllRoutes() {
-  const { role } = JSON.parse(localStorage.getItem("User"));
+  const { role } = JSON.parse(localStorage.getItem("User") !== null);
 
   const [selectedOption, setSelectedOption] = useState("user");
   const handleSelectOption = (option) => {
@@ -22,7 +22,7 @@ function AllRoutes() {
        <Routes className="main min-h-screen h-ful w-full">
           <Route path="/">
             <Route index element={<Home />} />
-            <Route path="/app/:appName/:appId" element={<OneApp />} />
+            <Route path="/app/:appId" element={<OneApp />} />
 
           <Route path="/al_adam">
           <Route

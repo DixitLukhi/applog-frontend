@@ -40,8 +40,7 @@ export default function Home() {
         return (
           <Link className="text-sm" 
             to={{
-              pathname: `/app/${row.appName}`,
-              state: { appId: row._id } // Pass the appId as state
+              pathname: `/app/${row._id}`,
             }}>
               {row.appName}
           </Link>
@@ -52,14 +51,15 @@ export default function Home() {
       header: "Logo",
       body: (row) => {
         return row.appLogo ? (
+          <div>
           <img
             src={row.appLogo ? driveUrl + row?.appLogo?.url : ""}
-            className="object-cover w-8 h-8"
+            className="h-8 w-full block"
             alt="NA"
-            width={50}
-            height={50}
+            typeof='webp'
             loading="lazy"
           />
+          </div>
         ) : (
           "NA"
         )
@@ -71,7 +71,7 @@ export default function Home() {
     <>
       <Header />
       <div className="home-container">
-        <h1>Home</h1>
+        <h1>Apps</h1>
         {appList && appList.length > 0 ? 
         <>
           <div className="data-table-container">

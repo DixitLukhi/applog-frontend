@@ -52,6 +52,7 @@ export default function PolicyPopUp({ handleClose }) {
               <div key={pol._id} className="policy-item">
                 <div>
                   <p>{pol.policyid}</p>
+                  <p>{pol.policy}</p>
                 </div>
               </div>
             ))

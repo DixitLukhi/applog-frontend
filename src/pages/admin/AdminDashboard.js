@@ -8,12 +8,7 @@ export default function AdminDashboard({ onSelectOption }) {
       <div className="leftPanel max-w-[230px] w-full shadow-md relative z-30 dark bg-gradient-to-r from-slate-950 via-black to-slate-950 sticky top-0">
         <div className="logo text-center px-4 py-5 mb-5 border-b border-slate-700">
           <Link to="/" className="block" aria-label="Redirect To Home">
-            {/* <img
-              src={logo}
-              alt="Logo"
-              className="max-w-full w-auto mx-auto pr-5"
-              loading="lazy"
-            /> */}
+            Home
           </Link>
         </div>
         <div className="nav text-white">

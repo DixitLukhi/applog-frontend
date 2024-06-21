@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -6,11 +6,10 @@ import { baseUrl } from "../../api/baseUrl";
 import { header } from "../core/helper";
 import { SIGNIN, SIGNUP, USER } from "../../api/constApi";
 import { ToastContainer, toast } from "react-toastify";
-import { addClass, removeClass } from "../../asset.js/js/script";
 import { useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Register({ handleClose }) {
-  
   const navigate = useNavigate();
 
   const registerInitialState = {
@@ -51,23 +50,25 @@ export default function Register({ handleClose }) {
       .required("Password is required*"),
   });
 
-  const handelRegister = async (values) => {
+  const handleRegister = async (values) => {
     try {
-      const payload = Object.assign({}, values);
-      const response = await axios.post(`${baseUrl}${SIGNUP}`, payload, {headers: header});
+      const payload = { ...values };
+      const response = await axios.post(`${baseUrl}${SIGNUP}`, payload, {
+        headers: header,
+      });
       if (response.data?.IsSuccess) {
-				toast.success(response.data.Message);
+        toast.success(response.data.Message);
       } else {
         toast.error(response.data.Message);
       }
     } catch (error) {
-      toast.error("something Went to Wrong!!");
+      toast.error("Something went wrong!");
     }
   };
-  
-  const handelLogin = async (values) => {
+
+  const handleLogin = async (values) => {
     try {
-      const payload = Object.assign({}, values);
+      const payload = { ...values };
       const response = await axios.post(`${baseUrl}${SIGNIN}`, payload);
       if (response.data?.IsSuccess) {
         localStorage.clear();
@@ -77,16 +78,16 @@ export default function Register({ handleClose }) {
         toast.error(response.data.Message);
       }
     } catch (error) {
-      toast.error("something Went to Wrong!!");
+      toast.error("Something went wrong!");
     }
   };
 
   const getUserProfile = async () => {
     try {
-      const response = await axios.get(`${baseUrl}${USER}`, {headers : header});
-      
+      const response = await axios.get(`${baseUrl}${USER}`, {
+        headers: header,
+      });
       if (response.data?.IsSuccess) {
-        console.log(response.data.Data);
         localStorage.setItem("User", JSON.stringify(response.data.Data));
         window.location.reload();
         navigate("/");
@@ -94,20 +95,20 @@ export default function Register({ handleClose }) {
         toast.error(response.data.Message);
       }
     } catch (error) {
-      toast.error("Something Went to Wrong!!");
+      toast.error("Something went wrong!");
     }
-  }
+  };
 
   const formikRegister = useFormik({
     initialValues: registerInitialState,
     validationSchema: registerValidationSchema,
-    onSubmit: handelRegister,
+    onSubmit: handleRegister,
   });
 
   const formikLogin = useFormik({
     initialValues: loginInitialState,
     validationSchema: loginValidationSchema,
-    onSubmit: handelLogin,
+    onSubmit: handleLogin,
   });
 
   const setRegisterInputValue = useCallback(
@@ -130,16 +131,24 @@ export default function Register({ handleClose }) {
 
   return (
     <>
-      {/* <!-- Register Popup [S] --> */}
-      <div
-        id="LRPopup"
-        className="fixed inset-0 w-screen h-screen flex items-center justify-center z-50 dark show hidden"
-      >
-        <span
-          onClick={() => addClass("#LRPopup", "hidden")}
-          className="fixed inset-0 w-screen h-screen bg-black/40 z-30 backdrop-blur-sm cursor-pointer"
-        ></span>
-            <div>
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <button className="modal-close" onClick={() => handleClose(false)}>
+            <svg
+              className="w-6 h-6"
+              width="50"
+              height="50"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fill="#000"
+                d="M20.746 3.329a1 1 0 00-1.415 0l-7.294 7.294-7.294-7.294a1 1 0 10-1.414 1.414l7.294 7.294-7.294 7.294a1 1 0 001.414 1.415l7.294-7.295 7.294 7.295a1 1 0 001.415-1.415l-7.295-7.294 7.295-7.294a1 1 0 000-1.414z"
+              ></path>
+            </svg>
+          </button>
+          <div className="space-y-5">
+            <div id="SignIn">
               <form
                 className="text-xs tracking-wider space-y-4"
                 onSubmit={formikLogin.handleSubmit}
@@ -170,7 +179,7 @@ export default function Register({ handleClose }) {
                     }
                   />
                 </div>
-                <div className="">
+                <div>
                   <button
                     type="submit"
                     aria-label="Sign In"
@@ -184,8 +193,8 @@ export default function Register({ handleClose }) {
                 <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
                 <span
                   onClick={() => {
-                    addClass("#SignIn", "hidden");
-                    removeClass("#SignUp", "hidden");
+                    document.getElementById("SignIn").classList.add("hidden");
+                    document.getElementById("SignUp").classList.remove("hidden");
                   }}
                   className="cursor-pointer text-xs text-gray-500 uppercase dark:text-gray-400"
                 >
@@ -282,8 +291,8 @@ export default function Register({ handleClose }) {
                 <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
                 <span
                   onClick={() => {
-                    addClass("#SignUp", "hidden");
-                    removeClass("#SignIn", "hidden");
+                    document.getElementById("SignUp").classList.add("hidden");
+                    document.getElementById("SignIn").classList.remove("hidden");
                   }}
                   className="cursor-pointer text-xs text-gray-500 uppercase dark:text-gray-400"
                 >
@@ -292,6 +301,8 @@ export default function Register({ handleClose }) {
                 <span className="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
               </div>
             </div>
+          </div>
+        </div>
       </div>
       <ToastContainer
         position="bottom-right"
@@ -305,8 +316,6 @@ export default function Register({ handleClose }) {
         pauseOnHover
         theme="colored"
       />
-
-      {/* <!-- Register Popup [E] --> */}
     </>
   );
 }

@@ -34,9 +34,10 @@ export default function AddAppPopUp({ handleClose, data, setReload}) {
         values.guidelines = Object.keys(selectedGuidelines).map(key => ({
             _id: key,
             followed: selectedGuidelines[key] === 'true'
-        }));;
+        }));
         try {
           const payload = Object.assign({}, values);
+          // return console.log(values);
           const response = await axios.post(`${baseUrl}${APP}`, payload, {headers: header});
           if (response.data?.IsSuccess) {
             setReload(true);
@@ -117,6 +118,14 @@ export default function AddAppPopUp({ handleClose, data, setReload}) {
         }
       };
 
+      const mergeObj =  appFormik.values.guidelines.map(status => {
+        const policy = guidelines.find(pol => pol._id === status._id);
+        return {
+          ...status,
+          policyid: policy?.policyid,
+          policy: policy?.policy
+        };
+      });
     useEffect(() => {
         getAllGuidelineList();
     }, []);
@@ -197,36 +206,80 @@ export default function AddAppPopUp({ handleClose, data, setReload}) {
                 </div>
               </div>
             </div>
-            <p>Please select guidelines:</p>
-            {guidelines && guidelines.length > 0 ? (
-    <>
-    {guidelines.map((gd) => (
-                        <div key={gd._id}>
-                            {gd.policyid} {gd.policy}
-                            <input
-                                type="radio"
-                                id={`true-${gd._id}`}
-                                name={`policy-${gd._id}`}
-                                value="true"
-                                checked={selectedGuidelines[gd._id] === 'true'}
-                                onChange={() => handleChange(gd._id, 'true')}
-                            />
-                            <label htmlFor={`true-${gd._id}`}>Follow</label><br />
-                            <input
-                                type="radio"
-                                id={`false-${gd._id}`}
-                                name={`policy-${gd._id}`}
-                                value="false"
-                                checked={selectedGuidelines[gd._id] === 'false'}
-                                onChange={() => handleChange(gd._id, 'false')}
-                            />
-                            <label htmlFor={`false-${gd._id}`}>Not Follow</label><br />
-                        </div>
-                    ))}
-    </>
-) : (
-    "No Guidelines are there for add"
-)}<div className="flex space-x-5 mt-6">
+            <div className="guidelines-table">
+      <p>Please select guidelines:</p>
+      {guidelines && guidelines.length > 0 ? (
+        <table>
+          <thead>
+            <tr>
+              <th>Policy ID</th>
+              <th>Policy</th>
+              <th>Options</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* {appFormik.values.guidelines.length > 0 ? <>
+              {() => mergeObj()}
+              {mergeObj.map((gd) => (
+              <tr key={gd._id} className="guideline-item">
+                <td>{gd.policyid}</td>
+                <td>{gd.policy}</td>
+                <td className="guideline-options">
+                  <input
+                    type="radio"
+                    id={`true-${gd._id}`}
+                    name={`policy-${gd._id}`}
+                    value="true"
+                    checked={gd.followed === true}
+                    onChange={() => handleChange(gd._id, true)}
+                  />
+                  <label htmlFor={`true-${gd._id}`}>Follow</label>
+                  <input
+                    type="radio"
+                    id={`false-${gd._id}`}
+                    name={`policy-${gd._id}`}
+                    value="false"
+                    checked={gd.followed === false}
+                    onChange={() => handleChange(gd._id, false)}
+                  />
+                  <label htmlFor={`false-${gd._id}`}>Not Follow</label>
+                </td>
+              </tr>
+            ))} */}
+            {/* </> : */}
+            <>{guidelines.map((gd) => (
+              <tr key={gd._id} className="guideline-item">
+                <td>{gd.policyid}</td>
+                <td>{gd.policy}</td>
+                <td className="guideline-options">
+                  <input
+                    type="radio"
+                    id={`true-${gd._id}`}
+                    name={`policy-${gd._id}`}
+                    value="true"
+                    checked={selectedGuidelines[gd._id] === 'true'}
+                    onChange={() => handleChange(gd._id, 'true')}
+                  />
+                  <label htmlFor={`true-${gd._id}`}>Follow</label>
+                  <input
+                    type="radio"
+                    id={`false-${gd._id}`}
+                    name={`policy-${gd._id}`}
+                    value="false"
+                    checked={selectedGuidelines[gd._id] === 'false'}
+                    onChange={() => handleChange(gd._id, 'false')}
+                  />
+                  <label htmlFor={`false-${gd._id}`}>Not Follow</label>
+                </td>
+              </tr>
+            ))}
+            </>
+          </tbody>
+        </table>
+      ) : (
+        <p>No guidelines are available to add</p>
+      )}
+    </div><div className="flex space-x-5 mt-6">
               <button
                 className="btn btn-dark w-full py-4"
                 onClick={() => handleClose(false)}
@@ -247,3 +300,34 @@ export default function AddAppPopUp({ handleClose, data, setReload}) {
     </>
   )
 }
+
+<style jsx>{`
+  .guidelines-table {
+    padding: 20px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  .guideline-options {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .guideline-options label {
+    margin-left: 5px;
+  }
+`}</style>
