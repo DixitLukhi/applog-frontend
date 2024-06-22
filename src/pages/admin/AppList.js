@@ -55,20 +55,23 @@ export default function AppList() {
     },
     {
       header: "Logo",
-      field: (row) => {
-        return row.appLogo ? (
-          <img
-            src={row.appLogo ? driveUrl + row?.appLogo?.url : ""}
-            className="object-cover w-8 h-8"
-            alt="NA"
-            width={100}
-            height={100}
-            loading="lazy"
-          />
-        ) : (
-          "NA"
-        )
-      },
+      // field: (row) => {
+      //   return row.appLogo ? (
+      //     <img
+      //       src={row.appLogo ? driveUrl + row?.appLogo?.url : ""}
+      //       className="object-cover w-8 h-8"
+      //       alt="NA"
+      //       width={100}
+      //       height={100}
+      //       loading="lazy"
+      //     />
+      //   ) : (
+      //     "NA"
+      //   )
+      body: (row) => {
+        return <img src={`${driveUrl}${row.image}`} alt={row.appName} className="w-6rem shadow-2 border-round" />;
+      }
+      // },
     },
     {
       header: "Action",

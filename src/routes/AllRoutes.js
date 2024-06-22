@@ -28,7 +28,8 @@ function AllRoutes() {
           <Route
                 index
                 element={
-                  role ? (
+                  // role ? 
+                  (
                     <>
                       <div className="main flex min-h-screen">
                         <AdminDashboard onSelectOption={handleSelectOption} />
@@ -37,9 +38,10 @@ function AllRoutes() {
                         {selectedOption === "app" ? <AppList /> : <></>}                        
                       </div>
                     </>
-                  ) : (
-                    <Home />
-                  )
+                  ) 
+                  // : (
+                  //   <Home />
+                  // )
                 }
               />
           </Route>

@@ -49,21 +49,25 @@ export default function Home() {
     },
     {
       header: "Logo",
-      body: (row) => {
-        return row.appLogo ? (
-          <div>
-          <img
-            src={row.appLogo ? driveUrl + row?.appLogo?.url : ""}
-            className="h-8 w-full block"
-            alt="NA"
-            typeof='webp'
-            loading="lazy"
-          />
-          </div>
-        ) : (
-          "NA"
-        )
-      },
+      // body: (row) => {
+      //   return row.appLogo ? (
+      //     <div>
+      //     <img
+      //       src={row.appLogo ? driveUrl + row?.appLogo?.url : ""}
+      //       className="h-8 w-full block"
+      //       alt="NA"
+      //       typeof='webp'
+      //       loading="lazy"
+      //     />
+      //     </div>
+      //   ) : (
+      //     "NA"
+      //   )
+      // },
+      body: 
+      (row) => {
+        return <img src={`${driveUrl}${row.appLogo.url}`} alt={row.appName} className="w-6rem shadow-2 border-round" />;
+      }
     },
   ];
 
