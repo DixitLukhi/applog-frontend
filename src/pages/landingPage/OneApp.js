@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { baseUrl, driveUrl } from '../../api/baseUrl';
 import { APP } from '../../api/constApi';
 import Header from '../../component/core/Header';
+import ADCB from "../../asset/images/adcb.webp"
 
 export default function OneApp() {
       const {appId} = useParams();
@@ -31,15 +32,14 @@ export default function OneApp() {
   return (
     <>
       <Header />
-      <div>App : {appData.appName}</div>
-      <img src={appData && appData?.appLogo && appData?.appLogo?.url && appData?.appLogo?.url !== "" ? driveUrl+appData?.appLogo?.url : ""} alt={appData?.appName} w-full h-full/>
+      <div>{appData.appName}</div>
+      <img src={ADCB} alt={appData?.appName} w-full h-full/>
 
       {appData?.guidelines && appData?.guidelines.length > 0 ? (
           <table className="policy-table">
             <thead>
               <tr>
-                <th>Policy ID</th>
-                <th>Policy</th>
+                <td>Policy Table</td>
               </tr>
             </thead>
             <tbody>

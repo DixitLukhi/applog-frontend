@@ -9,6 +9,7 @@ import Header from '../../component/core/Header';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Link } from 'react-router-dom';
+import ADCB from "../../asset/images/adcb.webp"
 
 export default function Home() {
 
@@ -66,7 +67,7 @@ export default function Home() {
       // },
       body: 
       (row) => {
-        return <img src={`${driveUrl}${row.appLogo.url}`} alt={row.appName} className="w-6rem shadow-2 border-round" />;
+        return <img src={ADCB} alt={row.appName} className="w-6rem shadow-2 border-round" />;
       }
     },
   ];
