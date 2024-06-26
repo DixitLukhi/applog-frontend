@@ -3,7 +3,7 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import axios from "axios";
 import { baseUrl, driveUrl } from "../../api/baseUrl";
-import { header } from "../../component/core/helper";
+import { header, logos } from "../../component/core/helper";
 import { toast } from "react-toastify";
 import { ALL_APP, REMOVE_APP } from "../../api/constApi";
 import Modal from "../../common/Modals/Modal";
@@ -68,9 +68,11 @@ export default function AppList() {
       //   ) : (
       //     "NA"
       //   )
-      body: (row) => {
-        return <img src={`${driveUrl}${row.image}`} alt={row.appName} className="w-6rem shadow-2 border-round" />;
-      }
+      body: 
+      (row) => {
+        const logo = logos.find(logo => logo.name === row?.appName); 
+       return <img src={logo ? logo?.url : ""} alt={row.appName} className="w-6rem shadow-2 border-round" />;
+     }
       // },
     },
     {

@@ -10,6 +10,7 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Link } from 'react-router-dom';
 import ADCB from "../../asset/images/adcb.webp"
+import { logos } from '../../component/core/helper';
 export default function Home() {
 
   const [appList, setAppList] = useState([]);
@@ -58,7 +59,7 @@ export default function Home() {
       //       alt="NA"
       //       typeof='webp'
       //       loading="lazy"
-      //     />
+      //     /> 
       //     </div>
       //   ) : (
       //     "NA"
@@ -66,7 +67,8 @@ export default function Home() {
       // },
       body: 
       (row) => {
-        return <img src={ADCB} alt={row.appName} className="w-6rem shadow-2 border-round" />;
+         const logo = logos.find(logo => logo.name === row?.appName); 
+        return <img src={logo ? logo?.url : ""} alt={row.appName} className="w-6rem shadow-2 border-round" />;
       }
     },
   ];

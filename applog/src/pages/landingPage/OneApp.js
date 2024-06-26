@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 import { baseUrl, driveUrl } from '../../api/baseUrl';
 import { APP } from '../../api/constApi';
 import Header from '../../component/core/Header';
+import { logos } from '../../component/core/helper';
+import moment from "moment";
 
 export default function OneApp() {
       const {appId} = useParams();
@@ -32,7 +34,7 @@ export default function OneApp() {
     <>
       <Header />
       <div>App : {appData.appName}</div>
-      <img src={appData && appData?.appLogo && appData?.appLogo?.url && appData?.appLogo?.url !== "" ? driveUrl+appData?.appLogo?.url : ""} alt={appData?.appName} w-full h-full/>
+      <img src={logos.find(logo => logo.name === appData.appName)?.url} alt={appData.appName} className="w-6rem shadow-2 border-round" />
 
       {appData?.guidelines && appData?.guidelines.length > 0 ? (
           <table className="policy-table">
@@ -45,6 +47,7 @@ export default function OneApp() {
             <tbody>
               {appData?.guidelines.map((pol) => (
                 <tr key={pol._id._id} className="policy-item">
+                  <td>{pol?.modified_at && pol.modified_at !== "" && moment(pol?.modified_at).format('L')}</td>
                   <td>{pol._id.policyid}</td>
                   <td>{pol._id.policy}</td>
                   {pol.followed ? 

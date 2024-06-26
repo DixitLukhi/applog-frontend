@@ -14,11 +14,17 @@ export default function AddAppPopUp({ handleClose, data, setReload}) {
     const [selectedGuidelines, setSelectedGuidelines] = useState({});
 
     const handleChange = (id, value) => {
-        setSelectedGuidelines(prevState => ({
-            ...prevState,
-            [id]: value
-        }));
+      const currentDate = new Date().toISOString(); // Get the current date in ISO format
+      setSelectedGuidelines(prevState => ({
+        ...prevState,
+        [id]: { 
+          followed: value, 
+          modified_at: Math.floor(new Date().getTime())
+        }
+      }));
     };
+    
+
     const appInitialState = {
         appid: data?.appid ? data?.appid : "",
         appName: data?.appName ? data?.appName : "",
@@ -33,7 +39,8 @@ export default function AddAppPopUp({ handleClose, data, setReload}) {
       const handelAddApp = async (values) => {
         values.guidelines = Object.keys(selectedGuidelines).map(key => ({
             _id: key,
-            followed: selectedGuidelines[key] === 'true'
+            followed: selectedGuidelines[key] === 'true',
+            modified_at: selectedGuidelines[key].modified_at
         }));
         try {
           const payload = Object.assign({}, values);
@@ -248,31 +255,31 @@ export default function AddAppPopUp({ handleClose, data, setReload}) {
             ))} */}
             {/* </> : */}
             <>{guidelines.map((gd) => (
-              <tr key={gd._id} className="guideline-item">
-                <td>{gd.policyid}</td>
-                <td>{gd.policy}</td>
-                <td className="guideline-options">
-                  <input
-                    type="radio"
-                    id={`true-${gd._id}`}
-                    name={`policy-${gd._id}`}
-                    value="true"
-                    checked={selectedGuidelines[gd._id] === 'true'}
-                    onChange={() => handleChange(gd._id, 'true')}
-                  />
-                  <label htmlFor={`true-${gd._id}`}>Follow</label>
-                  <input
-                    type="radio"
-                    id={`false-${gd._id}`}
-                    name={`policy-${gd._id}`}
-                    value="false"
-                    checked={selectedGuidelines[gd._id] === 'false'}
-                    onChange={() => handleChange(gd._id, 'false')}
-                  />
-                  <label htmlFor={`false-${gd._id}`}>Not Follow</label>
-                </td>
-              </tr>
-            ))}
+  <tr key={gd._id} className="guideline-item">
+    <td>{gd.policyid}</td>
+    <td>{gd.policy}</td>
+    <td className="guideline-options">
+      <input
+        type="radio"
+        id={`true-${gd._id}`}
+        name={`policy-${gd._id}`}
+        value="true"
+        checked={selectedGuidelines[gd._id]?.followed === 'true'}
+        onChange={() => handleChange(gd._id, 'true')}
+      />
+      <label htmlFor={`true-${gd._id}`}>Follow</label>
+      <input
+        type="radio"
+        id={`false-${gd._id}`}
+        name={`policy-${gd._id}`}
+        value="false"
+        checked={selectedGuidelines[gd._id]?.followed === 'false'}
+        onChange={() => handleChange(gd._id, 'false')}
+      />
+      <label htmlFor={`false-${gd._id}`}>Not Follow</label>
+    </td>
+  </tr>
+))}
             </>
           </tbody>
         </table>

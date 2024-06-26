@@ -36,7 +36,7 @@ export default function Header() {
                   </button>
                   {user && user?.role && user?.role == 1 && (
                     <button
-                      onClick={() => navigate("al_adam")}
+                      onClick={() => navigate("/al_adam")}
                       aria-label="Admin"
                       className="btn"
                     >
