@@ -191,3 +191,30 @@ leftPanel {
 .navLink:hover {
   background-color: #2d3748;
 }
+
+.bg-red {
+  background-color: #e0a3a2;
+}
+
+.bg-yellow {
+  background-color: #fffead;
+}
+
+.bg-green {
+  background-color: #d1ffd8;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background-color: #f2f2f2;
+}

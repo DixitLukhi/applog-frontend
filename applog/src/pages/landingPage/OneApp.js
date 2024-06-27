@@ -46,7 +46,7 @@ export default function OneApp() {
             </thead>
             <tbody>
               {appData?.guidelines.map((pol) => (
-                <tr key={pol._id._id} className="policy-item">
+                <tr key={pol._id._id} className={`policy-item ${pol?._id?.priority === 'l' ? 'bg-green' : pol?._id?.priority === 'h' ? 'bg-red' : 'bg-yellow'}`}>
                   <td>{pol?.modified_at && pol.modified_at !== "" && moment(pol?.modified_at).format('L')}</td>
                   <td>{pol._id.policyid}</td>
                   <td>{pol._id.policy}</td>

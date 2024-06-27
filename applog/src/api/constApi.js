@@ -7,9 +7,11 @@ export const ADMIN = "/api/admin";
 
 /* APPS */
 export const ALL_APP = "/api/allapp";
+export const COMPARE_APP = "/api/compareapp";
 export const APP = "/api/app";
 export const REMOVE_APP = "/api/removeapp";
 export const LOGO = "/api/logo";
+
 
 /* GUIDELINES */
 export const ALL_GUIDELINE = "/api/allguideline";
