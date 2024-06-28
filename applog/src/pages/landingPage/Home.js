@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import { baseUrl, driveUrl } from '../../api/baseUrl';
-import { ALL_APP, ALL_GUIDELINE, COMPARE_APP } from '../../api/constApi';
+import { ALL_APP, ALL_GUIDELINE, APP, COMPARE_APP } from '../../api/constApi';
 import PolicyPopUp from '../../component/popUp/PolicyPopUp';
 import Modal from '../../common/Modals/Modal';
 import Header from '../../component/core/Header';
@@ -13,6 +13,7 @@ import ADCB from "../../asset/images/adcb.webp"
 import { header, logos } from '../../component/core/helper';
 import { MultiSelect } from 'primereact/multiselect';
 import ViewGuidelinePopUp from '../../component/popUp/ViewGuidelinePopUp';
+import moment from "moment";
 
 
 export default function Home() {
@@ -24,6 +25,7 @@ export default function Home() {
   const [isViewGuidelinePopUp, setIsViewGuidelinePopUp] = useState(false);
   const [guidelineList, setGuidelineList] = useState([]);
   const [selectedApps, setSelectedApps] = useState(null);
+  const [oneAppData, setOneAppData] = useState(null);
 
   const getAppList = async () => {
     try {
@@ -40,6 +42,20 @@ export default function Home() {
       }
     } catch (error) {
       toast.error("Something went wrong!!");
+    }
+  }
+
+  const getOneApp = async (id) => {
+    try {
+      const response = await axios.get(`${baseUrl}${APP}?appid=${id}`);
+
+      if (response.data.IsSuccess) {
+        setOneAppData(response.data.Data);
+      } else {
+        toast.error(response.data.Message);
+      }
+    } catch (error) {
+      toast.error("Sonething Went Wrong!!");
     }
   }
 
@@ -126,11 +142,13 @@ export default function Home() {
       <Header />
       <div className="home-container">
         <h1>Apps</h1>
+        <button className="policy-button" onClick={() => setIsPolicyPopUpOpen(true)}>Policy</button>
+
         <div className="card flex justify-content-center">
 
           <MultiSelect value={selectedApps} onChange={(e) => setSelectedApps(e.value)} options={appList} optionLabel="appName"
             filter placeholder="Select Apps" maxSelectedLabels={5} className="w-full md:w-20rem" />
-        <button onClick={() => compareApp()}>Compare</button>
+          <button onClick={() => compareApp()}>Compare</button>
         </div>
 
         {guidelineList && guidelineList.length > 0 && compareResult && compareResult.length > 0 ?
@@ -140,7 +158,7 @@ export default function Home() {
                 <tr>
                   <th style={{ border: '1px solid black', padding: '8px' }}>Guidelines</th>
                   {compareResult.map((cr) => (
-                    <th style={{ border: '1px solid black', padding: '8px' }}>{cr.appName}</th>
+                    <th style={{ border: '1px solid black', padding: '8px' }} onClick={() => getOneApp(cr._id)}>{cr.appName}</th>
                   ))}
                   {/* <th style={{ border: '1px solid black', padding: '8px' }}>Gpay</th>
           <th style={{ border: '1px solid black', padding: '8px' }}>ICICI</th>
@@ -150,7 +168,7 @@ export default function Home() {
               <tbody>
                 {guidelineList.map((guideline) => (
                   <tr key={guideline._id}>
-                    <td style={{ border: '1px solid black', padding: '8px' }} className={`${guideline?.priority === 'l' ? 'bg-green' : guideline?.priority === 'h' ? 'bg-red' : 'bg-yellow'}`} onClick={() => {setViewPolicyData({policyid: guideline.policyid, policy: guideline.policy}); setIsViewGuidelinePopUp(true)}}>{guideline.policyid}</td>
+                    <td style={{ border: '1px solid black', padding: '8px' }} className={`${guideline?.priority === 'l' ? 'bg-green' : guideline?.priority === 'h' ? 'bg-red' : 'bg-yellow'}`} onClick={() => { setViewPolicyData({ policyid: guideline.policyid, policy: guideline.policy }); setIsViewGuidelinePopUp(true) }}>{guideline.policyid}</td>
                     {compareResult.map((app) => {
                       const guidelineFollowed = (app.guidelines).find(g => g._id === guideline._id)?.followed;
                       return (
@@ -165,7 +183,7 @@ export default function Home() {
             </table>
           </> : "Compare Apps As You Want"}
 
-        
+
         {/* {appList && appList.length > 0 ?
           <>
             <div className="data-table-container">
@@ -183,20 +201,44 @@ export default function Home() {
             </div>
           </>
           : "No app is there"} */}
-        <div className="grid grid-cols-5 gap-4 p-4">
-          {appList && appList.length > 0 && appList.map((logo, index) => (
-            <div key={index} className="flex justify-center items-center border border-gray-200 rounded-lg">
-              <img src={logos.find(l => l.name === logo?.appName).url} alt={logo?.appName} className={`w-16 h-16 object-contain ${false ? 'rounded-full' : ''}`} />
-            </div>
-          ))}
-        </div>
-        <button className="policy-button" onClick={() => setIsPolicyPopUpOpen(true)}>Policy</button>
+
+        {oneAppData && oneAppData != null ? <>
+          <div>App : {oneAppData.appName}</div>
+          <img src={logos.find(logo => logo.name === oneAppData.appName)?.url} alt={oneAppData.appName} className="w-6rem shadow-2 border-round" />
+
+          {oneAppData?.guidelines && oneAppData?.guidelines.length > 0 ? (
+            <table className="policy-table">
+              <thead>
+                <tr>
+                  <th>Policy ID</th>
+                  <th>Policy</th>
+                </tr>
+              </thead>
+              <tbody>
+                {oneAppData?.guidelines.map((pol) => (
+                  <tr key={pol._id._id} className={`policy-item ${pol?._id?.priority === 'l' ? 'bg-green' : pol?._id?.priority === 'h' ? 'bg-red' : 'bg-yellow'}`}>
+                    <td>{pol?.modified_at && pol.modified_at !== "" && moment(pol?.modified_at).format('L')}</td>
+                    <td>{pol._id.policyid}</td>
+                    <td>{pol._id.policy}</td>
+                    {pol.followed ?
+                      <button className='btn'>Follow</button>
+                      :
+                      <button className='btn'>Not Follow</button>
+                    }
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            "No policy added"
+          )}
+        </> : ""}
 
         <Modal isOpen={isPolicyPopUpOpen}>
           <PolicyPopUp handleClose={setIsPolicyPopUpOpen} />
         </Modal>
         <Modal isOpen={isViewGuidelinePopUp}>
-          <ViewGuidelinePopUp handleClose={setIsViewGuidelinePopUp} data={viewPolicyData}/>
+          <ViewGuidelinePopUp handleClose={setIsViewGuidelinePopUp} data={viewPolicyData} />
         </Modal>
         <ToastContainer
           position="bottom-right"
