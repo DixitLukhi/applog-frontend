@@ -74,7 +74,7 @@ export default function Register({ handleClose }) {
         localStorage.clear();
         await localStorage.setItem("Token", response.data?.Data.token);
         getUserProfile();
-        window.location.reload();
+        // window.location.reload();
       } else {
         toast.error(response.data.Message);
       }

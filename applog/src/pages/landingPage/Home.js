@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import { baseUrl, driveUrl } from '../../api/baseUrl';
-import { ALL_APP, COMPARE_APP } from '../../api/constApi';
+import { ALL_APP, ALL_GUIDELINE, COMPARE_APP } from '../../api/constApi';
 import PolicyPopUp from '../../component/popUp/PolicyPopUp';
 import Modal from '../../common/Modals/Modal';
 import Header from '../../component/core/Header';
@@ -10,8 +10,9 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Link } from 'react-router-dom';
 import ADCB from "../../asset/images/adcb.webp"
-import { logos } from '../../component/core/helper';
+import { header, logos } from '../../component/core/helper';
 import { MultiSelect } from 'primereact/multiselect';
+import ViewGuidelinePopUp from '../../component/popUp/ViewGuidelinePopUp';
 
 
 export default function Home() {
@@ -19,7 +20,9 @@ export default function Home() {
   const [appList, setAppList] = useState([]);
   const [compareResult, setCompareResult] = useState([]);
   const [isPolicyPopUpOpen, setIsPolicyPopUpOpen] = useState(false);
- 
+  const [viewPolicyData, setViewPolicyData] = useState({});
+  const [isViewGuidelinePopUp, setIsViewGuidelinePopUp] = useState(false);
+  const [guidelineList, setGuidelineList] = useState([]);
   const [selectedApps, setSelectedApps] = useState(null);
 
   const getAppList = async () => {
@@ -32,7 +35,7 @@ export default function Home() {
           appName: app.appName
         }));
         setAppList(apps);
-     } else {
+      } else {
         toast.error(response.data.Message);
       }
     } catch (error) {
@@ -41,25 +44,41 @@ export default function Home() {
   }
 
   const encodeQueryData = (data) => {
-    return data.map(id => `apps[]=${encodeURIComponent(id.id)}`).join('&');
+    if (data != null) {
+      return data.map(id => `apps[]=${encodeURIComponent(id.id)}`).join('&');
+    }
   };
 
   const compareApp = async () => {
+    if (selectedApps == null) {
+      return toast.error("Select atleast one app");
+    }
     const queryString = encodeQueryData(selectedApps);
     try {
-      const response = await axios.get(`${baseUrl}${COMPARE_APP}?${queryString}`);
+      const [guidelineResponse, compareResponse] = await Promise.all([
+        axios.get(`${baseUrl}${ALL_GUIDELINE}`, { headers: header }),
+        axios.get(`${baseUrl}${COMPARE_APP}?${queryString}`)
+      ]);
 
-      if (response.data.IsSuccess) {
-        setCompareResult(response.data.Data);
-     } else {
-        toast.error(response.data.Message);
+      // Handle guideline response
+      if (guidelineResponse.data.IsSuccess) {
+        setGuidelineList(guidelineResponse.data.Data);
+      } else {
+        toast.error(guidelineResponse.data.Message);
+      }
+
+      // Handle compare response
+      if (compareResponse.data.IsSuccess) {
+        setCompareResult(compareResponse.data.Data);
+      } else {
+        toast.error(compareResponse.data.Message);
       }
     } catch (error) {
       toast.error("Something went wrong!!");
     }
   }
 
-  useEffect(() => {    
+  useEffect(() => {
     getAppList();
   }, []);
 
@@ -68,11 +87,11 @@ export default function Home() {
       header: "Name",
       body: (row) => {
         return (
-          <Link className="text-sm" 
+          <Link className="text-sm"
             to={{
               pathname: `/app/${row.id}`,
             }}>
-              {row.appName}
+            {row.appName}
           </Link>
         );
       },
@@ -94,89 +113,103 @@ export default function Home() {
       //     "NA"
       //   )
       // },
-      body: 
-      (row) => {
-         const logo = logos.find(logo => logo.name === row?.appName); 
-        return <img src={logo ? logo?.url : ""} alt={row.appName} className="w-6rem shadow-2 border-round" />;
-      }
+      body:
+        (row) => {
+          const logo = logos.find(logo => logo.name === row?.appName);
+          return <img src={logo ? logo?.url : ""} alt={row.appName} className="w-6rem shadow-2 border-round" />;
+        }
     },
   ];
-  const data = [
-    { guideline: "RBI001", Gpay: "YES", ICICI: "YES", ADCCB: "NO" },
-    { guideline: "RBI002", Gpay: "NO", ICICI: "NO", ADCCB: "NO" },
-    { guideline: "RBI006", Gpay: "YES", ICICI: "NO", ADCCB: "YES" }
-  ];
+
   return (
     <>
       <Header />
       <div className="home-container">
         <h1>Apps</h1>
-        <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-      <thead>
-        <tr>
-          <th style={{ border: '1px solid black', padding: '8px' }}>Guidelines</th>
-          <th style={{ border: '1px solid black', padding: '8px' }}>Gpay</th>
-          <th style={{ border: '1px solid black', padding: '8px' }}>ICICI</th>
-          <th style={{ border: '1px solid black', padding: '8px' }}>ADCCB</th>
-        </tr>
-      </thead>
-      <tbody>
-        {guidelines.map((guideline) => (
-          <tr key={guideline.id}>
-            <td style={{ border: '1px solid black', padding: '8px' }}>{guideline.name}</td>
-            <td style={{ border: '1px solid black', padding: '8px' }}>
-              {appCompliance.Gpay?.includes(guideline.id) ? 'YES' : 'NO'}
-            </td>
-            <td style={{ border: '1px solid black', padding: '8px' }}>
-              {appCompliance.ICICI?.includes(guideline.id) ? 'YES' : 'NO'}
-            </td>
-            <td style={{ border: '1px solid black', padding: '8px' }}>
-              {appCompliance.ADCCB?.includes(guideline.id) ? 'YES' : 'NO'}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
         <div className="card flex justify-content-center">
-            
-        <MultiSelect value={selectedApps} onChange={(e) => setSelectedApps(e.value)} options={appList} optionLabel="appName" 
-                filter placeholder="Select Apps" maxSelectedLabels={5} className="w-full md:w-20rem" />
-                </div>
-                <button onClick={() => compareApp()}>Compare</button>
-        {appList && appList.length > 0 ? 
-        <>
-          <div className="data-table-container">
-            <DataTable
-              value={appList}
-              columnResizeMode={"expand"}
-              resizableColumns={true}
-              scrollable={true}
-              className="data-table"
-            >
-              {columns.map((col, index) => (
-                <Column key={index} field={col.field} header={col.header} body={col.body} />
-              ))}
-            </DataTable>
-          </div>
-        </>
-        : "No app is there"} 
-        <button className="policy-button" onClick={() => setIsPolicyPopUpOpen(true)}>Policy</button>
+
+          <MultiSelect value={selectedApps} onChange={(e) => setSelectedApps(e.value)} options={appList} optionLabel="appName"
+            filter placeholder="Select Apps" maxSelectedLabels={5} className="w-full md:w-20rem" />
+        <button onClick={() => compareApp()}>Compare</button>
+        </div>
+
+        {guidelineList && guidelineList.length > 0 && compareResult && compareResult.length > 0 ?
+          <>
+            <table style={{ borderCollapse: 'collapse', width: '100%' }}>
+              <thead>
+                <tr>
+                  <th style={{ border: '1px solid black', padding: '8px' }}>Guidelines</th>
+                  {compareResult.map((cr) => (
+                    <th style={{ border: '1px solid black', padding: '8px' }}>{cr.appName}</th>
+                  ))}
+                  {/* <th style={{ border: '1px solid black', padding: '8px' }}>Gpay</th>
+          <th style={{ border: '1px solid black', padding: '8px' }}>ICICI</th>
+          <th style={{ border: '1px solid black', padding: '8px' }}>ADCCB</th> */}
+                </tr>
+              </thead>
+              <tbody>
+                {guidelineList.map((guideline) => (
+                  <tr key={guideline._id}>
+                    <td style={{ border: '1px solid black', padding: '8px' }} className={`${guideline?.priority === 'l' ? 'bg-green' : guideline?.priority === 'h' ? 'bg-red' : 'bg-yellow'}`} onClick={() => {setViewPolicyData({policyid: guideline.policyid, policy: guideline.policy}); setIsViewGuidelinePopUp(true)}}>{guideline.policyid}</td>
+                    {compareResult.map((app) => {
+                      const guidelineFollowed = (app.guidelines).find(g => g._id === guideline._id)?.followed;
+                      return (
+                        <td key={app.appName} style={{ border: '1px solid black', padding: '8px' }}>
+                          {guidelineFollowed ? 'YES' : <div style={{ color: 'red' }}>NO</div>}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </> : "Compare Apps As You Want"}
+
         
+        {/* {appList && appList.length > 0 ?
+          <>
+            <div className="data-table-container">
+              <DataTable
+                value={appList}
+                columnResizeMode={"expand"}
+                resizableColumns={true}
+                scrollable={true}
+                className="data-table"
+              >
+                {columns.map((col, index) => (
+                  <Column key={index} field={col.field} header={col.header} body={col.body} />
+                ))}
+              </DataTable>
+            </div>
+          </>
+          : "No app is there"} */}
+        <div className="grid grid-cols-5 gap-4 p-4">
+          {appList && appList.length > 0 && appList.map((logo, index) => (
+            <div key={index} className="flex justify-center items-center border border-gray-200 rounded-lg">
+              <img src={logos.find(l => l.name === logo?.appName).url} alt={logo?.appName} className={`w-16 h-16 object-contain ${false ? 'rounded-full' : ''}`} />
+            </div>
+          ))}
+        </div>
+        <button className="policy-button" onClick={() => setIsPolicyPopUpOpen(true)}>Policy</button>
+
         <Modal isOpen={isPolicyPopUpOpen}>
           <PolicyPopUp handleClose={setIsPolicyPopUpOpen} />
         </Modal>
+        <Modal isOpen={isViewGuidelinePopUp}>
+          <ViewGuidelinePopUp handleClose={setIsViewGuidelinePopUp} data={viewPolicyData}/>
+        </Modal>
         <ToastContainer
-        position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="colored"
-      />
+          position="bottom-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
       </div>
     </>
   )

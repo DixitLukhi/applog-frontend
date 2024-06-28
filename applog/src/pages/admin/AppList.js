@@ -68,11 +68,11 @@ export default function AppList() {
       //   ) : (
       //     "NA"
       //   )
-      body: 
-      (row) => {
-        const logo = logos.find(logo => logo.name === row?.appName); 
-       return <img src={logo ? logo?.url : ""} alt={row.appName} className="w-6rem shadow-2 border-round" />;
-     }
+      field:
+        (row) => {
+          const logo = logos.find(logo => logo.name === row?.appName);
+          return <img src={logo ? logo?.url : ""} alt={row.appName} className="shadow-2 border-round" width={50} height={50}/>;
+        }
       // },
     },
     {
