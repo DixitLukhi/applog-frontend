@@ -34,7 +34,7 @@ export default function Header() {
                   >
                     Log Out
                   </button>
-                  {user && user?.role && user?.role == 1 && (
+                  {user && user?.role && user?.role === 1 && (
                     <button
                       onClick={() => navigate("/al_adam")}
                       aria-label="Admin"

@@ -75,12 +75,12 @@ export default function AddAppPopUp({ handleClose, data, setReload }) {
   const photoChangeHandler = async (event) => {
     const size = 2;
     let selected = event.target.files[0];
-    const options = {
-      maxSizeMB: 2,
-      maxWidthOrHeight: 1920,
-      useWebWorker: true,
-      // maxIteration: 1
-    };
+    // const options = {
+    //   maxSizeMB: 2,
+    //   maxWidthOrHeight: 1920,
+    //   useWebWorker: true,
+    //   // maxIteration: 1
+    // };
     try {
       if (selected && imageType.includes(selected.type)) {
         if (selected.size < size * 1024 * 1024) {

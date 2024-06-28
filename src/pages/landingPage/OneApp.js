@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { baseUrl, driveUrl } from '../../api/baseUrl';
+import { baseUrl } from '../../api/baseUrl';
 import { APP } from '../../api/constApi';
 import Header from '../../component/core/Header';
 import { logos } from '../../component/core/helper';

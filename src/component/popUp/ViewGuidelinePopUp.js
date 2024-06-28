@@ -1,8 +1,4 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { baseUrl } from "../../api/baseUrl";
-import { ALL_GUIDELINE } from "../../api/constApi";
-import { toast } from "react-toastify";
+import React from "react";
 
 export default function ViewGuidelinePopUp({ handleClose, data }) {
   

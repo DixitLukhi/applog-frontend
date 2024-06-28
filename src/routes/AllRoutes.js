@@ -1,4 +1,4 @@
-import React, { lazy, useState } from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "../pages/landingPage/Home";
 import PageNotFound from "../pages/pageNotFound/PageNotFound";
@@ -9,7 +9,7 @@ import AppList from "../pages/admin/AppList";
 import OneApp from "../pages/landingPage/OneApp";
 
 function AllRoutes() {
-  const { role } = JSON.parse(localStorage.getItem("User") !== null);
+  // const { role } = JSON.parse(localStorage.getItem("User") !== null);
 
   const [selectedOption, setSelectedOption] = useState("user");
   const handleSelectOption = (option) => {

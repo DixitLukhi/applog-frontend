@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import axios from "axios";
-import { baseUrl, driveUrl } from "../../api/baseUrl";
+import { baseUrl } from "../../api/baseUrl";
 import { header, logos } from "../../component/core/helper";
 import { toast } from "react-toastify";
 import { ALL_APP, REMOVE_APP } from "../../api/constApi";

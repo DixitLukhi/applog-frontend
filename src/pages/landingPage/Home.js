@@ -1,15 +1,13 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import { baseUrl, driveUrl } from '../../api/baseUrl';
+import { baseUrl } from '../../api/baseUrl';
 import { ALL_APP, ALL_GUIDELINE, APP, COMPARE_APP } from '../../api/constApi';
 import PolicyPopUp from '../../component/popUp/PolicyPopUp';
 import Modal from '../../common/Modals/Modal';
 import Header from '../../component/core/Header';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
-import { Link } from 'react-router-dom';
-import ADCB from "../../asset/images/adcb.webp"
+// import { DataTable } from 'primereact/datatable';
+// import { Column } from 'primereact/column';
 import { header, logos } from '../../component/core/helper';
 import { MultiSelect } from 'primereact/multiselect';
 import ViewGuidelinePopUp from '../../component/popUp/ViewGuidelinePopUp';
@@ -98,44 +96,44 @@ export default function Home() {
     getAppList();
   }, []);
 
-  const columns = [
-    {
-      header: "Name",
-      body: (row) => {
-        return (
-          <Link className="text-sm"
-            to={{
-              pathname: `/app/${row.id}`,
-            }}>
-            {row.appName}
-          </Link>
-        );
-      },
-    },
-    {
-      header: "Logo",
-      // body: (row) => {
-      //   return row.appLogo ? (
-      //     <div>
-      //     <img
-      //       src={row.appLogo ? driveUrl + row?.appLogo?.url : ""}
-      //       className="h-8 w-full block"
-      //       alt="NA"
-      //       typeof='webp'
-      //       loading="lazy"
-      //     /> 
-      //     </div>
-      //   ) : (
-      //     "NA"
-      //   )
-      // },
-      body:
-        (row) => {
-          const logo = logos.find(logo => logo.name === row?.appName);
-          return <img src={logo ? logo?.url : ""} alt={row.appName} className="w-6rem shadow-2 border-round" />;
-        }
-    },
-  ];
+  // const columns = [
+  //   {
+  //     header: "Name",
+  //     body: (row) => {
+  //       return (
+  //         <Link className="text-sm"
+  //           to={{
+  //             pathname: `/app/${row.id}`,
+  //           }}>
+  //           {row.appName}
+  //         </Link>
+  //       );
+  //     },
+  //   },
+  //   {
+  //     header: "Logo",
+  //     // body: (row) => {
+  //     //   return row.appLogo ? (
+  //     //     <div>
+  //     //     <img
+  //     //       src={row.appLogo ? driveUrl + row?.appLogo?.url : ""}
+  //     //       className="h-8 w-full block"
+  //     //       alt="NA"
+  //     //       typeof='webp'
+  //     //       loading="lazy"
+  //     //     /> 
+  //     //     </div>
+  //     //   ) : (
+  //     //     "NA"
+  //     //   )
+  //     // },
+  //     body:
+  //       (row) => {
+  //         const logo = logos.find(logo => logo.name === row?.appName);
+  //         return <img src={logo ? logo?.url : ""} alt={row.appName} className="w-6rem shadow-2 border-round" />;
+  //       }
+  //   },
+  // ];
 
   return (
     <>
