@@ -218,3 +218,319 @@ th, td {
 th {
   background-color: #f2f2f2;
 }
+
+
+
+/* General styles */
+
+body {
+  font-family: sans-serif; /* Change this to your preferred font family */
+  margin: 0;
+  padding: 0;
+}
+
+.home-container {
+  padding: 2rem; /* Adjust padding as needed */
+}
+
+/* Header styles */
+
+header {
+  background-color: #f0f0f0; /* Change header background color */
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+/* Dropdown styles */
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  min-width: 160px;
+  border: 1px solid #ddd;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 4px;
+  padding: 8px; /* Add padding for content */
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  white-space: nowrap; /* Prevent text wrapping */
+  text-overflow: ellipsis; /* Truncate long text with ellipsis */
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown-content.multiselect-dropdown { /* Apply these styles only if using PrimeReact MultiSelect */
+  border: none; /* Remove border for PrimeReact MultiSelect */
+  box-shadow: none; /* Remove box-shadow for PrimeReact MultiSelect */
+}
+
+/* Button styles */
+
+.policy-button,
+.btn {
+  background-color: #4CAF50; /* Change button background color */
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px; /* Add border radius for a softer look */
+}
+
+.btn {
+  background-color: #4CAF50; /* Change base color */
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px; /* Add border radius for a softer look */
+}
+
+.btn:hover {
+  background-color: #3e8e41; /* Change hover color */
+}
+
+/* Table styles */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+.policy-table {
+  /* Customize styles for the policy table */
+  width: 50%; /* Adjust width as needed */
+  margin: 0 auto; /* Center the table */
+}
+
+/*
+.policy-item {
+
+}
+*/
+.policy-item.bg-green {
+  background-color: #90EE90; /* Green for low priority */
+}
+
+.policy-item.bg-red {
+  background-color: #FFCDD2; /* Red for high priority */
+}
+
+.policy-item.bg-yellow {
+  background-color: #FFFFCC; /* Yellow for medium priority */
+}
+
+/* Modal styles (assuming a basic modal library is used) */
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+/* Toast styles (assuming a toast library is used) */
+
+.toast {
+  /* Style toasts as desired */
+}
+
+/* General styles */
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  width: 400px; /* Adjust width as needed */
+  position: relative;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.modal-close svg {
+  width: 20px;
+  height: 20px;
+  fill: #000;
+}
+
+/* Form styles */
+.text-xs {
+  font-size: 0.75rem;
+}
+
+.tracking-wider {
+  letter-spacing: 0.05em;
+}
+
+.space-y-4 {
+  margin-top: 1rem;
+}
+
+.space-y-5 {
+  margin-top: 1.25rem;
+}
+
+.block {
+  display: block;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.px-5 {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.text-gray-700 {
+  color: #37474f;
+}
+
+.placeholder-gray-400 {
+  color: #9ca3af;
+}
+
+.bg-white {
+  background-color: #fff;
+}
+
+.border {
+  border: 1px solid;
+}
+
+.border-gray-200 {
+  border-color: #e0e0e0;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.dark:placeholder-gray-400 {
+  color: #7f8c8d; /* Adjust for dark theme */
+}
+
+.dark:bg-gray-800 {
+  background-color: #1a202c; /* Adjust for dark theme */
+}
+
+.dark:text-gray-200 {
+  color: #adb5bd; /* Adjust for dark theme */
+}
+
+.dark:border-gray-700 {
+  border-color: #343a40; /* Adjust for dark theme */
+}
+
+.text-gray-600 {
+  color: #6b7280;
+}
+
+.dark:text-gray-400 {
+  color: #9ca3af; /* Adjust for dark theme */
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.btn-light {
+  background-color: #f8f9fa;
+  color: #37474f;
+}
+
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.w-1 {
+  width: 20%;
+}
+
+.border-b {
+  border-bottom: 1px solid;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
