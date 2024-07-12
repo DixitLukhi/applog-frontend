@@ -380,10 +380,6 @@ th, td {
 
 /* Toast styles (assuming a toast library is used) */
 
-.toast {
-  /* Style toasts as desired */
-}
-
 /* General styles */
 body {
   font-family: sans-serif;

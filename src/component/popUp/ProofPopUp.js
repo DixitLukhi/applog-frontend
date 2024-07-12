@@ -2,7 +2,7 @@ import React from "react";
 // import { driveUrl } from "../../api/baseUrl";
 
 export default function ProofPopUp({ data, handleClose }) {
-    const { img, desc } = data;
+    const { desc } = data;
   return (
     <>
       <div className="modal-overlay">
