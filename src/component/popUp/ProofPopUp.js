@@ -25,7 +25,6 @@ export default function ProofPopUp({ data, handleClose }) {
             </button>
           </div>
           <div className="modal-body">
-            {console.log(driveUrl+img)}
             <img
               className="modal-image"
               src="https://www.bleepstatic.com/images/news/tutorials/windows-11/administrator-command-prompt/access-denied.jpg"
