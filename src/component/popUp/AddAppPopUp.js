@@ -67,7 +67,7 @@ export default function AddAppPopUp({ handleClose, data, setReload }) {
 
   const photoChangeHandler = async (id, event) => {
     const size = 2;
-    const api = id && id != "" ? PROOF : LOGO;
+    const api = id && id !== "" ? PROOF : LOGO;
     let selected = event.target.files[0];
     // const options = {
     //   maxSizeMB: 2,
@@ -86,7 +86,7 @@ export default function AddAppPopUp({ handleClose, data, setReload }) {
             const response = await axios.post(`${baseUrl}${api}`, formData, { headers: imageHeader });
             if (response.data.IsSuccess) {
               const uploadUrl = response.data.Data.url;
-              if (api == LOGO) {
+              if (api === LOGO) {
                 setAppInputValue("appLogo", {
                   url: uploadUrl || selected,
                   type: "image",
