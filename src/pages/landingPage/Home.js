@@ -12,6 +12,7 @@ import { header, logos } from '../../component/core/helper';
 import { MultiSelect } from 'primereact/multiselect';
 import ViewGuidelinePopUp from '../../component/popUp/ViewGuidelinePopUp';
 import moment from "moment";
+import ProofPopUp from '../../component/popUp/ProofPopUp';
 
 
 export default function Home() {
@@ -24,6 +25,8 @@ export default function Home() {
   const [guidelineList, setGuidelineList] = useState([]);
   const [selectedApps, setSelectedApps] = useState(null);
   const [oneAppData, setOneAppData] = useState(null);
+  const [profData, setProofData] = useState({});
+  const [isProofPopUpOpen, setIsProofPopUpOpen] = useState(false);
 
   const getAppList = async () => {
     try {
@@ -218,11 +221,12 @@ export default function Home() {
                     <td>{pol?.modified_at && pol.modified_at !== "" && moment(pol?.modified_at).format('L')}</td>
                     <td>{pol._id.policyid}</td>
                     <td>{pol._id.policy}</td>
-                    {pol.followed ?
+                    <div onClick={() => {setProofData({img: pol?.proofImage?.url, desc: pol?.proofDescription}); setIsProofPopUpOpen(true)}}> {pol.followed ?
                       <button className='btn'>Follow</button>
                       :
                       <button className='btn'>Not Follow</button>
                     }
+                    </div>
                   </tr>
                 ))}
               </tbody>
@@ -234,6 +238,9 @@ export default function Home() {
 
         <Modal isOpen={isPolicyPopUpOpen}>
           <PolicyPopUp handleClose={setIsPolicyPopUpOpen} />
+        </Modal>
+        <Modal isOpen={isProofPopUpOpen}>
+          <ProofPopUp handleClose={setIsProofPopUpOpen} data={profData}/>
         </Modal>
         <Modal isOpen={isViewGuidelinePopUp}>
           <ViewGuidelinePopUp handleClose={setIsViewGuidelinePopUp} data={viewPolicyData} />

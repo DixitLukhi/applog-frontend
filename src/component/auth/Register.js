@@ -85,8 +85,12 @@ export default function Register({ handleClose }) {
 
   const getUserProfile = async () => {
     try {
+      const token = localStorage.getItem("Token");
+      const headerT = {
+        'Authorization': `Bearer ${token}`,
+      }
       const response = await axios.get(`${baseUrl}${USER}`, {
-        headers: header,
+        headers: headerT,
       });
       if (response.data?.IsSuccess) {
         localStorage.setItem("User", JSON.stringify(response.data.Data));

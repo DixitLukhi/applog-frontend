@@ -11,6 +11,7 @@ export const COMPARE_APP = "/api/compareapp";
 export const APP = "/api/app";
 export const REMOVE_APP = "/api/removeapp";
 export const LOGO = "/api/logo";
+export const PROOF = "/api/proof";
 
 
 /* GUIDELINES */

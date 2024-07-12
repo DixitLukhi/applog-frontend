@@ -5,7 +5,7 @@ import { baseUrl, driveUrl } from '../../api/baseUrl';
 import { header, imageHeader } from '../core/helper';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
-import { ALL_GUIDELINE, APP, LOGO } from '../../api/constApi';
+import { ALL_GUIDELINE, APP, LOGO, PROOF } from '../../api/constApi';
 import { imageType } from '../../shared/constants';
 
 export default function AddAppPopUp({ handleClose, data, setReload }) {
@@ -13,16 +13,16 @@ export default function AddAppPopUp({ handleClose, data, setReload }) {
   const [guidelines, setGuidelines] = useState([]);
   const [selectedGuidelines, setSelectedGuidelines] = useState({});
 
-  const handleChange = (id, value) => {
+  const handleChange = (id, key, value) => {
     setSelectedGuidelines(prevState => ({
       ...prevState,
-    [id]: {
-        followed: value,
-        modified_at: Math.floor(new Date().getTime())
+      [id]: {
+        ...prevState[id],
+        [key]: value,
+        modified_at: Math.floor(new Date().getTime()),
       }
     }));
   };
-
 
   const appInitialState = {
     appid: data?.appid ? data?.appid : "",
@@ -39,7 +39,9 @@ export default function AddAppPopUp({ handleClose, data, setReload }) {
     values.guidelines = Object.keys(selectedGuidelines).map(key => ({
       _id: key,
       followed: selectedGuidelines[key].followed === "true",
-      modified_at: selectedGuidelines[key].modified_at
+      modified_at: selectedGuidelines[key].modified_at,
+      proofDescription: selectedGuidelines[key].proofDescription || '',
+      proofImage: selectedGuidelines[key].proofImage || '',
     }));
     try {
       const payload = Object.assign({}, values);
@@ -53,7 +55,7 @@ export default function AddAppPopUp({ handleClose, data, setReload }) {
         toast.error(response.data.Message);
       }
     } catch (error) {
-      toast.error("something Went to Wrong!!");
+      toast.error("Something went wrong!!");
     }
   };
 
@@ -63,17 +65,9 @@ export default function AddAppPopUp({ handleClose, data, setReload }) {
     onSubmit: handelAddApp,
   });
 
-  const setAppInputValue = useCallback(
-    (key, value) =>
-      appFormik.setValues({
-        ...appFormik.values,
-        [key]: value,
-      }),
-    [appFormik]
-  );
-
-  const photoChangeHandler = async (event) => {
+  const photoChangeHandler = async (id, event) => {
     const size = 2;
+    const api = id && id != "" ? PROOF : LOGO;
     let selected = event.target.files[0];
     // const options = {
     //   maxSizeMB: 2,
@@ -86,18 +80,26 @@ export default function AddAppPopUp({ handleClose, data, setReload }) {
         if (selected.size < size * 1024 * 1024) {
           const formData = new FormData();
           formData.append("file", selected);
-          let uploadUrl;
-
+          
           if (typeof selected === "object") {
-            const response = await axios.post(`${baseUrl}${LOGO}`, formData, { headers: imageHeader });
+            
+            const response = await axios.post(`${baseUrl}${api}`, formData, { headers: imageHeader });
             if (response.data.IsSuccess) {
-              uploadUrl = response.data.Data.url;
+              const uploadUrl = response.data.Data.url;
+              if (api == LOGO) {
+                setAppInputValue("appLogo", {
+                  url: uploadUrl || selected,
+                  type: "image",
+                });
+              } else {
+                console.log("in", uploadUrl);
+                handleChange(id, 'proofImage', {
+                  url: uploadUrl || selected,
+                  type: "image",
+                });
+              }
             }
           }
-          setAppInputValue("appLogo", {
-            url: uploadUrl || selected,
-            type: "image",
-          });
         } else {
           toast.error("File size shoup be<=2 MB");
         }
@@ -109,7 +111,14 @@ export default function AddAppPopUp({ handleClose, data, setReload }) {
     }
   };
 
-
+  const setAppInputValue = useCallback(
+    (key, value) =>
+      appFormik.setValues({
+        ...appFormik.values,
+        [key]: value,
+      }),
+    [appFormik]
+  );
 
   const getAllGuidelineList = async () => {
     try {
@@ -120,26 +129,18 @@ export default function AddAppPopUp({ handleClose, data, setReload }) {
         toast.error(response.data.Message);
       }
     } catch (error) {
-      toast.error("Something Went To Wrong!!");
+      toast.error("Something went wrong!!");
     }
   };
 
-  // const mergeObj = appFormik.values.guidelines.map(status => {
-  //   const policy = guidelines.find(pol => pol._id === status._id);
-  //   return {
-  //     ...status,
-  //     policyid: policy?.policyid,
-  //     policy: policy?.policy
-  //   };
-  // });
   useEffect(() => {
     getAllGuidelineList();
   }, []);
+
   return (
     <>
       <div className="modal-overlay">
         <div className="modal-content">
-
           <div>
             <div className="fixed inset-0 w-screen h-screen bg-[rgba(0,0,0,0.4)] flex backdrop-blur-[1px] z-[992]">
               <div className="max-w-[800px] w-full max-h-[90vh] overflow-y-auto m-auto bg-white rounded-3xl shadow-shadowbox p-5 sm:p-8">
@@ -205,7 +206,7 @@ export default function AddAppPopUp({ handleClose, data, setReload }) {
                             name="images"
                             id="upload"
                             className="appearance-none hidden"
-                            onChange={photoChangeHandler}
+                            onChange={(e) => photoChangeHandler("", e)}
                           />
                           <span className="font-play text-4xl">+</span>
                         </label>
@@ -221,38 +222,11 @@ export default function AddAppPopUp({ handleClose, data, setReload }) {
                             <th>Policy ID</th>
                             <th>Policy</th>
                             <th>Options</th>
+                            <th>Proof Image</th>
+                            <th>Proof Description</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {/* {appFormik.values.guidelines.length > 0 ? <>
-              {() => mergeObj()}
-              {mergeObj.map((gd) => (
-              <tr key={gd._id} className="guideline-item">
-                <td>{gd.policyid}</td>
-                <td>{gd.policy}</td>
-                <td className="guideline-options">
-                  <input
-                    type="radio"
-                    id={`true-${gd._id}`}
-                    name={`policy-${gd._id}`}
-                    value="true"
-                    checked={gd.followed === true}
-                    onChange={() => handleChange(gd._id, true)}
-                  />
-                  <label htmlFor={`true-${gd._id}`}>Follow</label>
-                  <input
-                    type="radio"
-                    id={`false-${gd._id}`}
-                    name={`policy-${gd._id}`}
-                    value="false"
-                    checked={gd.followed === false}
-                    onChange={() => handleChange(gd._id, false)}
-                  />
-                  <label htmlFor={`false-${gd._id}`}>Not Follow</label>
-                </td>
-              </tr>
-            ))} */}
-                          {/* </> : */}
                           <>
                             {guidelines.map((gd) => (
                               <tr key={gd._id} className="guideline-item">
@@ -265,7 +239,7 @@ export default function AddAppPopUp({ handleClose, data, setReload }) {
                                     name={`policy-${gd._id}`}
                                     value="true"
                                     checked={selectedGuidelines[gd._id]?.followed === 'true'}
-                                    onChange={() => handleChange(gd._id, 'true')}
+                                    onChange={() => handleChange(gd._id, 'followed', 'true')}
                                   />
                                   <label htmlFor={`true-${gd._id}`}>Follow</label>
                                   <input
@@ -274,9 +248,28 @@ export default function AddAppPopUp({ handleClose, data, setReload }) {
                                     name={`policy-${gd._id}`}
                                     value="false"
                                     checked={selectedGuidelines[gd._id]?.followed === 'false'}
-                                    onChange={() => handleChange(gd._id, 'false')}
+                                    onChange={() => handleChange(gd._id, 'followed', 'false')}
                                   />
                                   <label htmlFor={`false-${gd._id}`}>Not Follow</label>
+                                </td>
+                                <td>
+                                  <input
+                                    type="text"
+                                    id={`description-${gd._id}`}
+                                    name={`description-${gd._id}`}
+                                    value={selectedGuidelines[gd._id]?.proofDescription || ''}
+                                    onChange={(e) => handleChange(gd._id, 'proofDescription', e.target.value)}
+                                    className="block w-full px-5 py-3 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
+                                  />
+                                </td>
+                                <td>
+                                  <input
+                                    type="file"
+                                    id={`proofImage-${gd._id}`}
+                                    name={`proofImage-${gd._id}`}
+                                    onChange={(e) => photoChangeHandler(gd._id, e)}
+                                    className="block w-full px-5 py-3 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
+                                  />
                                 </td>
                               </tr>
                             ))}
@@ -286,7 +279,8 @@ export default function AddAppPopUp({ handleClose, data, setReload }) {
                     ) : (
                       <p>No guidelines are available to add</p>
                     )}
-                  </div><div className="flex space-x-5 mt-6">
+                  </div>
+                  <div className="flex space-x-5 mt-6">
                     <button
                       className="btn btn-dark w-full py-4"
                       onClick={() => handleClose(false)}

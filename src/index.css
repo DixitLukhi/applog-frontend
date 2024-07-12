@@ -145,6 +145,21 @@ code {
   cursor: pointer;
 }
 
+.modal-body {
+  display: flex;
+  align-items: center;
+}
+
+.modal-image {
+  max-width: 40%;
+  margin-right: 20px;
+  border-radius: 8px;
+}
+
+.modal-description {
+  max-width: 60%;
+}
+
 .policy-item {
   display: flex;
   justify-content: space-between;
