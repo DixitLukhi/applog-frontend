@@ -1,19 +1,54 @@
 import React from "react";
-// import { driveUrl } from "../../api/baseUrl";
 
 export default function ProofPopUp({ data, handleClose }) {
-    const { desc } = data;
+  // const { desc } = data;
+
   return (
     <>
-      <div className="modal-overlay">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h1 className="modal-title">Proof Of Claim</h1>
-            <button className="modal-close" onClick={() => handleClose(false)}>
+      <div
+        className="modal-overlay"
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 1000,
+        }}
+      >
+        <div
+          className="modal-content"
+          style={{
+            backgroundColor: "white",
+            borderRadius: "8px",
+            width: "100%",
+            maxWidth: "1200px",
+            padding: "20px",
+            position: "relative",
+          }}
+        >
+          <div className="modal-header" style={{ marginBottom: "20px" }}>
+            <h1 className="modal-title" style={{ margin: 0 }}>Proof Of Claim</h1>
+            <button
+              className="modal-close"
+              onClick={() => handleClose(false)}
+              style={{
+                background: "none",
+                border: "none",
+                position: "absolute",
+                top: "10px",
+                right: "10px",
+                cursor: "pointer",
+              }}
+            >
               <svg
                 className="w-6 h-6"
-                width="50"
-                height="50"
+                width="24"
+                height="24"
                 fill="none"
                 viewBox="0 0 24 24"
               >
@@ -27,12 +62,19 @@ export default function ProofPopUp({ data, handleClose }) {
           <div className="modal-body">
             <img
               className="modal-image"
-              src="https://www.bleepstatic.com/images/news/tutorials/windows-11/administrator-command-prompt/access-denied.jpg"
-            //   src="https://drive.google.com/file/d/1Hkmi4F6e6XnaK_Woe9wCsZaMKmYbPTyp"
+              src="https://miro.medium.com/v2/resize:fit:1400/1*rO3A2ld1-A9FDX5buVZU1A.png"
               alt="Description"
+              style={{
+                width: "100%",
+                height: "auto",
+                maxHeight: "80vh",
+                objectFit: "contain",
+                marginBottom: "20px",
+              }}
             />
-            <div className="modal-description">
-              <p>{desc}</p>
+            <div className="modal-description" style={{ textAlign: "center" }}>
+              {/* <p>{desc}</p> */}
+              <p>ADC Bank is a mobile banking application that provides users with essential banking services such as account management, fund transfers, bill payments, and loan applications. While it offers a range of functionalities, ADC Bank has significant security vulnerabilities that pose risks to its users.</p>
             </div>
           </div>
         </div>
