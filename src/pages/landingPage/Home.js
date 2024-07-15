@@ -208,10 +208,10 @@ export default function Home() {
           <img src={logos.find(logo => logo.name === oneAppData.appName)?.url} alt={oneAppData.appName} className="w-6rem shadow-2 border-round" />
 
           {oneAppData?.guidelines && oneAppData?.guidelines.length > 0 ? (
-            <table className="policy-table">
+            <table className="policy-table" style={{ textAlign: 'justify' }}>
               <thead>
                 <tr>
-                  <th>Policy ID</th>
+                  {/* <th>Policy ID</th> */}
                   <th>Policy</th>
                 </tr>
               </thead>
