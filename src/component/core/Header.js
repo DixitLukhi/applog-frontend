@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../../common/Modals/Modal';
 import Register from '../auth/Register';
+import AnalysisPopUp from '../popUp/AnalyisPopUp';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -9,6 +10,7 @@ export default function Header() {
   const token = localStorage.getItem("Token");
 
   const [isRegisterPopUpOpen, setIsRegisterPopUpOpen] = useState(false);
+  const [isAnalysisPopUpOpen, setIsAnalysiPopUpOpen] = useState(false);
 
   const logout = () => {
     navigate("/");
@@ -25,6 +27,13 @@ export default function Header() {
               {user?.first_name && user?.first_name !== "" ? <span>{user?.first_name}</span> : ""}
             </li>
             <li>
+            <button
+                      onClick={() => setIsAnalysiPopUpOpen(true)}
+                      aria-label="Analysis"
+                      className="btn"
+                    >
+                      Analysis
+                    </button>
               {token && token !== "" ? 
                 <>
                   <button
@@ -56,6 +65,9 @@ export default function Header() {
           </ul>
         </nav>
       </header>
+      <Modal isOpen={isAnalysisPopUpOpen}>
+        <AnalysisPopUp handleClose={setIsAnalysiPopUpOpen} />
+      </Modal>
       <Modal isOpen={isRegisterPopUpOpen}>
         <Register handleClose={setIsRegisterPopUpOpen} />
       </Modal>
