@@ -60,20 +60,7 @@ export default function ProofPopUp({ data, handleClose }) {
             </button>
           </div>
           <div className="modal-body">
-          <img src={`https://drive.google.com/uc?export=view&id=1C0IWoIZyiS0qchFQaJ8Yh-Uf4NvwGSGU`} alt="drive image"/>
-
-            {/* <img
-              className="modal-image"
-              src="https://drive.google.com/file/d/1C0IWoIZyiS0qchFQaJ8Yh-Uf4NvwGSGU/view"
-              alt="Description"
-              style={{
-                width: "100%",
-                height: "auto",
-                maxHeight: "80vh",
-                objectFit: "contain",
-                marginBottom: "20px",
-              }}
-            /> */}
+          <img src={`https://drive.google.com/uc?export=view&id=1C0IWoIZyiS0qchFQaJ8Yh-Uf4NvwGSGU`} alt="drive proof"/>
             <div className="modal-description" style={{ textAlign: "center" }}>
               {/* <p>{desc}</p> */}
               <p>ADC Bank is a mobile banking application that provides users with essential banking services such as account management, fund transfers, bill payments, and loan applications. While it offers a range of functionalities, ADC Bank has significant security vulnerabilities that pose risks to its users.</p>
