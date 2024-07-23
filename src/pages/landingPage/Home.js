@@ -221,7 +221,7 @@ export default function Home() {
                     <td>{pol?.modified_at && pol.modified_at !== "" && moment(pol?.modified_at).format('L')}</td>
                     <td>{pol._id.policyid}</td>
                     <td>{pol._id.policy}</td>
-                    <div onClick={() => {setProofData({img: pol?.proofImage?.url, desc: pol?.proofDescription}); setIsProofPopUpOpen(true)}}> {pol.followed ?
+                    <div onClick={() => {setProofData({proofid: (oneAppData?.appName + "_" + pol?._id?.policyid).replace(/ /g, "_"), img: pol?.proofImage?.url, desc: pol?.proofDescription}); setIsProofPopUpOpen(true)}}> {pol.followed ?
                       <button className='btn'>Follow</button>
                       :
                       <button className='btn'>Not Follow</button>

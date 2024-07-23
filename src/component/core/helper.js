@@ -1,18 +1,19 @@
-import ADCB from "../../asset/images/adcb.webp";
-import ANGELONE from "../../asset/images/angelone.webp";
-import AXIS from "../../asset/images/axis.webp";
-import BHIM from "../../asset/images/bhim.webp";
-import CANARA from "../../asset/images/canara.webp";
-import CRED from "../../asset/images/cred.webp";
-import GPAY from "../../asset/images/gpay.webp";
-import GROWW from "../../asset/images/groww.webp";
-import HERE from "../../asset/images/here.webp";
-import ICICI from "../../asset/images/icici.webp";
-import PAYTM from "../../asset/images/paytm.webp";
-import PHARMEASY from "../../asset/images/pharmeasy.webp";
-import PHONEPE from "../../asset/images/phonepe.webp";
-import SBI from "../../asset/images/sbi.webp";
-import SLICE from "../../asset/images/slice.webp";
+import ADCB from "../../asset/images/logos/adcb.webp";
+import ANGELONE from "../../asset/images/logos/angelone.webp";
+import AXIS from "../../asset/images/logos/axis.webp";
+import BHIM from "../../asset/images/logos/bhim.webp";
+import CANARA from "../../asset/images/logos/canara.webp";
+import CRED from "../../asset/images/logos/cred.webp";
+import GPAY from "../../asset/images/logos/gpay.webp";
+import GROWW from "../../asset/images/logos/groww.webp";
+import HERE from "../../asset/images/logos/here.webp";
+import ICICI from "../../asset/images/logos/icici.webp";
+import PAYTM from "../../asset/images/logos/paytm.webp";
+import PHARMEASY from "../../asset/images/logos/pharmeasy.webp";
+import PHONEPE from "../../asset/images/logos/phonepe.webp";
+import SBI from "../../asset/images/logos/sbi.webp";
+import SLICE from "../../asset/images/logos/slice.webp";
+import ADCB_mBanking_RBI058 from "../../asset/images/proofs/adcb1.webp";
 
 const token = localStorage.getItem("Token");
 
@@ -86,4 +87,11 @@ export const logos = [
         name: "slice",
         url: SLICE
     },
+]
+
+export const proofs = [
+    {
+        id: "ADCB_mBanking_RBI058",
+        url: ADCB_mBanking_RBI058
+    }
 ]

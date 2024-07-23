@@ -1,7 +1,8 @@
 import React from "react";
+import { proofs } from "../core/helper";
 
 export default function ProofPopUp({ data, handleClose }) {
-  // const { desc } = data;
+  const proof = proofs.find(prf => prf?.id === data?.proofid);
 
   return (
     <>
@@ -59,11 +60,23 @@ export default function ProofPopUp({ data, handleClose }) {
               </svg>
             </button>
           </div>
-          <div className="modal-body">
-          <img src={`https://drive.google.com/uc?export=view&id=1C0IWoIZyiS0qchFQaJ8Yh-Uf4NvwGSGU`} alt="drive proof"/>
-            <div className="modal-description" style={{ textAlign: "center" }}>
-              {/* <p>{desc}</p> */}
-              <p>ADC Bank is a mobile banking application that provides users with essential banking services such as account management, fund transfers, bill payments, and loan applications. While it offers a range of functionalities, ADC Bank has significant security vulnerabilities that pose risks to its users.</p>
+          <div className="modal-body" style={{ display: "flex" }}>
+            <div style={{ flex: "1", paddingRight: "20px" }}>
+              <img
+                src={proof?.url && proof?.url !== "" ? proof?.url : "https://st.depositphotos.com/1607243/1565/i/450/depositphotos_15659541-stock-photo-approve-man.jpg"}
+                alt="drive proof"
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  borderRadius: "8px",
+                }}
+              />
+            </div>
+            <div className="modal-description" style={{ flex: "2", textAlign: "left" }}>
+              <p>
+                ADC Bank is a mobile banking application that provides users with essential banking services such as account management, fund
+                transfers, bill payments, and loan applications. While it offers a range of functionalities, ADC Bank has significant security vulnerabilities that pose risks to its users.
+              </p>
             </div>
           </div>
         </div>
